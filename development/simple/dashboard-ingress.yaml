@@ -5,6 +5,8 @@ metadata:
     # add an annotation indicating the issuer to use.
     cert-manager.io/cluster-issuer: dev-ca-issuer
     nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    ingress.kubernetes.io/ssl-passthrough: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
   name: dashboard-ingress
   namespace: kubernetes-dashboard
 spec:
