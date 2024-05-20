@@ -6,6 +6,11 @@ spec:
   selector:
     app: http-server
   ports:
-    - protocol: TCP
+    - name: http
       port: 80
-      targetPort: 8000
+      protocol: TCP
+      targetPort: 8080
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 8080

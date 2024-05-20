@@ -4,6 +4,7 @@ metadata:
   annotations:
     # add an annotation indicating the issuer to use.
     cert-manager.io/cluster-issuer: dev-ca-issuer
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
   name: test-ingress
   namespace: test
 spec:
