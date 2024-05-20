@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: main-ingress
-  namespace: default
+  name: test-ingress
+  namespace: test
 spec:
   rules:
     - host: nginx.enthusiast.local
