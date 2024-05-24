@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vault
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: vault
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: ''
+    repoURL: 'https://helm.releases.hashicorp.com'
+    targetRevision: 0.28.0
+    chart: vault
+    helm:
+      values: |
+        csi:
+          enabled: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 50m
+              memory: 128Mi
+        server:
+          image:
+            repository: "hashicorp/vault"
+            tag: "1.8.4"
+            pullPolicy: IfNotPresent
+          logLevel: "info"
+          logFormat: "json"
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+              cpu: 50m
+
+  project: system-utils
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
