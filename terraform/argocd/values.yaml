@@ -1,0 +1,37 @@
+global:
+  logging:
+    format: json
+    # -- Set the global logging level. One of: `debug`, `info`, `warn` or `error`
+    level: info
+
+configs:
+  params:
+    server.insecure: true
+    server.disable.auth: true
+
+server:
+  certificate:
+    enabled: true
+    domain: argo.kube
+    renewBefore: 360h
+    duration: 9125h
+    issuer:
+      group: cert-manager.io
+      kind: ClusterIssuer
+      name: dev-ca-issuer
+    privateKey:
+      algorithm: RSA
+      encoding: PKCS8
+      size: 4096
+      rotationPolicy: Always
+    usages:
+      - server auth
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    hostname: argo.kube
+    path: /
+    pathType: Prefix
+    tls: true

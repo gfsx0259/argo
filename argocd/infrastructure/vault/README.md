@@ -1,2 +1,0 @@
-# Vault after installing steps
-
