@@ -17,29 +17,37 @@ terraform {
 
 provider "kubernetes" {
   # uncomment if you use k3s distributive
-  # config_path = "/etc/rancher/k3s/k3s.yaml"
-  # config_context = "default"
-  config_path    = "/home/jeny/.kube/config"
-  config_context = "minikube"
+  config_path = "/etc/rancher/k3s/k3s.yaml"
+  config_context = "default"
+  # uncomment if you use minikube
+#   config_path    = "~/.kube/config"
+#   config_context = "minikube"
 }
 
 provider "kubectl" {
-  config_path    = "/home/jeny/.kube/config"
-  config_context = "minikube"
+  config_path = "/etc/rancher/k3s/k3s.yaml"
+    config_context = "default"
 }
 
 provider "helm" {
   kubernetes {
-        config_path = "/home/jeny/.kube/config"
-        config_context = "minikube"
-    }
+    config_path = "/etc/rancher/k3s/k3s.yaml"
+      config_context = "default"
+  }
 }
 
 module "argocd" {
   source = "./argocd"
-  depends_on = [module.certmanager]
+  depends_on = [
+    module.certmanager,
+    module.ingress,
+  ]
 }
 
 module "certmanager" {
   source = "./certmanager"
+}
+
+module "ingress" {
+  source = "./ingress"
 }

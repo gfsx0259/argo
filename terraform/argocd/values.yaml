@@ -1,3 +1,6 @@
+crds:
+  keep: false
+
 global:
   logging:
     format: json
@@ -28,9 +31,9 @@ server:
       - server auth
   ingress:
     enabled: true
-    ingressClassName: nginx
+    ingressClassName: system-ingress
     annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+      cert-manager.io/cluster-issuer: dev-ca-issuer
     hostname: argo.kube
     path: /
     pathType: Prefix

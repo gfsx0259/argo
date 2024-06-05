@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: helm
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: development
+
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 17.3.2
+    chart: nginx
+    helm:
+# Make container port empty to use http service inside ingress https://github.com/bitnami/charts/blob/main/bitnami/nginx/templates/ingress.yaml#L44
+      values: |
+        containerPorts:
+          http: 8080
+          https: ""
+        service:
+          type: ClusterIP
+        ingress:
+          enabled: true
+          ingressClassName: system-ingress
+          annotations:
+            cert-manager.io/cluster-issuer: dev-ca-issuer
+          hostname: nginx.kube
+          pathType: Prefix
+          path: /
+          tls: true
+
+  # Destination cluster and namespace to deploy the application
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo
+
+  # Sync policy
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
